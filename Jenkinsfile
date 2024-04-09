@@ -59,6 +59,12 @@ pipeline {
             }
         }
 
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/juleshkumar/jenkins-ec2.git'
+            }
+        }
+
         stage('Terraform Apply Stage 2') {
             steps {
                 script {
