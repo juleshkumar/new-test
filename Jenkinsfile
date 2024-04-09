@@ -28,7 +28,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Vpc Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/juleshkumar/new-test.git'
             }
@@ -59,7 +59,7 @@ pipeline {
             }
         }
 
-        stage('Checkout') {
+        stage('Instance Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/juleshkumar/jenkins-ec2.git'
             }
