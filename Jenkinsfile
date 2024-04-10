@@ -30,7 +30,7 @@ pipeline {
     stages {
         stage('Vpc Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/juleshkumar/new-test.git'
+                git branch: 'dev-1', url: 'https://github.com/juleshkumar/new-test.git'
             }
         }
 
