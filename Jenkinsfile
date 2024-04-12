@@ -88,7 +88,7 @@ pipeline {
 
         stage('Instance Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/juleshkumar/jenkins-ec2.git'
+                git branch: 'dev-1', url: 'https://github.com/juleshkumar/jenkins-ec2.git'
             }
         }
 
