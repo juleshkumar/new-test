@@ -102,7 +102,7 @@ pipeline {
                 dir('instance_workspace') {
                 script {
                     // Read Terraform outputs from file
-                    def tfOutputs = readFile 'outputs.tf'
+                    def tfOutputs = readFile '../vpc_workspace/outputs.tf'
                     def parsedOutputs = new groovy.json.JsonSlurper().parseText(tfOutputs)
 
                     // Store output values in environment variables for use in subsequent stages
