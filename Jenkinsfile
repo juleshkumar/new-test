@@ -110,21 +110,20 @@ pipeline {
                     def param2Value = parsedOutputs.vpc_id.value
 
                     sh "terraform plan -out tfplan \
-                            -var 'instance_sg_name=${params.instance_sg_name}' \
-                            -var 'ami=${params.ami}' \
-                            -var 'vpc_id=${param2Value}' \
-                            -var 'instance_type=${params.instance_type}' \
-                            -var 'subnet_id=${param1Value}' \
-                            -var 'key_pair=${params.key_pair}'"
-                    sh 'terraform show -no-color tfplan > tfplan.txt'
-                        script {
+                        -var 'instance_sg_name=${params.instance_sg_name}' \
+                        -var 'ami=${params.ami}' \
+                        -var 'vpc_id=${param2Value}' \
+                        -var 'instance_type=${params.instance_type}' \
+                        -var 'subnet_id=${param1Value}' \
+                        -var 'key_pair=${params.key_pair}'"
+                sh 'terraform show -no-color tfplan > tfplan.txt'
+                script {
                     if (params.action == 'apply') {
                         if (!params.autoApprove) {
                             def plan = readFile 'tfplan.txt'
                             input message: "Do you want to apply the plan?",
                             parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                         }
-
                         sh "terraform ${params.action} -input=false tfplan"
                     } else if (params.action == 'destroy') {
                         sh "terraform ${params.action} --auto-approve \
@@ -134,7 +133,6 @@ pipeline {
                                 -var 'instance_type=${params.instance_type}' \
                                 -var 'subnet_id=${param1Value}' \
                                 -var 'key_pair=${params.key_pair}'"
-                                
                     } else {
                         error "Invalid action selected. Please choose either 'apply' or 'destroy'."
                     }
