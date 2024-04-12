@@ -92,7 +92,7 @@ pipeline {
        stage('Instance Checkout') {
             steps {
                 dir('instance_workspace') {
-                git branch: 'dev-1', url: 'https://github.com/juleshkumar/jenkins-ec2.git'
+                git branch: 'dev-1', url: 'https://github.com/juleshkumar/new-test.git'
             }
             }
         }
