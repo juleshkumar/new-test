@@ -99,9 +99,9 @@ pipeline {
 
         stage('Terraform Apply Stage 2') {
             steps {
-                dir('instance_workspace') {
                 script {
-                    // Read Terraform outputs from file
+                    dir('instance_workspace') {
+                    sh 'terraform init'
                     def tfOutputs = readFile '../vpc_workspace/outputs.tf'
                     def parsedOutputs = new groovy.json.JsonSlurper().parseText(tfOutputs)
 
