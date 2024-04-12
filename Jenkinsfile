@@ -86,9 +86,11 @@ pipeline {
             }
         }
 
-        stage('Instance Checkout') {
+       stage('Instance Checkout') {
             steps {
-                git branch: 'dev-1', url: 'https://github.com/juleshkumar/new-test.git'
+                script {
+                    checkout([$class: 'GitSCM', branches: [[name: 'dev-1']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/juleshkumar/new-test.git']]])
+                }
             }
         }
 
