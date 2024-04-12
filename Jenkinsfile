@@ -30,14 +30,16 @@ pipeline {
     stages {
         stage('Vpc Checkout') {
             steps {
+                dir('vpc_workspace') {
                 git branch: 'main', url: 'https://github.com/juleshkumar/new-test.git'
             }
+        }
         }
 
         stage('Terraform Apply') {
             steps {
                 script {
-                    // Execute Terraform commands for Stage 1
+                    dir('terraform_apply_workspace') {
                     sh 'terraform init'
                     sh "terraform plan -out tfplan \
                             -var 'name=${params.name}' \
@@ -84,18 +86,20 @@ pipeline {
                     sh 'terraform output -json > outputs.tf'
                 }
             }
+            }
         }
 
        stage('Instance Checkout') {
             steps {
-                script {
-                    checkout([$class: 'GitSCM', branches: [[name: 'dev-1']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/juleshkumar/new-test.git']]])
-                }
+                dir('instance_workspace') {
+                git branch: 'dev-1', url: 'https://github.com/juleshkumar/jenkins-ec2.git'
+            }
             }
         }
 
         stage('Terraform Apply Stage 2') {
             steps {
+                dir('terraform_apply_stage_2_workspace') {
                 script {
                     // Read Terraform outputs from file
                     def tfOutputs = readFile 'outputs.tf'
@@ -138,6 +142,7 @@ pipeline {
 
             }
                 }
+            }
             }
         }
     }
