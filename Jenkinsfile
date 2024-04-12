@@ -4,17 +4,17 @@ pipeline {
     parameters {
         booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
         choice(name: 'action', choices: ['apply', 'destroy'], description: 'Select the action to perform')
-        string(name: 'name', defaultValue: 'vpc', description: 'enter name of your vpc')
-        string(name: 'project', defaultValue: 'testing', description: 'enter your project name')
-        string(name: 'environment', defaultValue: 'dev', description: 'mention env name')
+        string(name: 'name', defaultValue: 'test', description: 'enter name of your vpc')
+        string(name: 'project', defaultValue: 'dev-testing', description: 'enter your project name')
+        string(name: 'environment', defaultValue: 'uat', description: 'mention env name')
         string(name: 'region', defaultValue: 'ap-south-1', description: 'mention resource creation region')
-        string(name: 'cidr_block', defaultValue: '10.0.0.0/16', description: 'enter the cidr for vpc')
+        string(name: 'cidr_block', defaultValue: '10.87.0.0/16', description: 'enter the cidr for vpc')
         string(name: 'availability_zone_one', defaultValue: 'ap-south-1a', description: 'enter the az1')
         string(name: 'availability_zone_two', defaultValue: 'ap-south-1b', description: 'enter the az2')
-        string(name: 'public_subnet_a_cidr_blocks', defaultValue: '10.0.0.0/24', description: 'enter cidr for public subnet 1a')
-        string(name: 'public_subnet_b_cidr_blocks', defaultValue: '10.0.1.0/24', description: 'enter cidr for public subnet 1b')
-        string(name: 'private_subnet_a_cidr_blocks', defaultValue: '10.0.2.0/24', description: 'enter cidr for pvt subnet 1a')
-        string(name: 'private_subnet_b_cidr_blocks', defaultValue: '10.0.3.0/24', description: 'enter cidr for pvt subnet 1b')
+        string(name: 'public_subnet_a_cidr_blocks', defaultValue: '10.87.0.0/18', description: 'enter cidr for public subnet 1a')
+        string(name: 'public_subnet_b_cidr_blocks', defaultValue: '10.87.64.0/18', description: 'enter cidr for public subnet 1b')
+        string(name: 'private_subnet_a_cidr_blocks', defaultValue: '10.87.128.0/18', description: 'enter cidr for pvt subnet 1a')
+        string(name: 'private_subnet_b_cidr_blocks', defaultValue: '10.87.192.0/18', description: 'enter cidr for pvt subnet 1b')
         string(name: 'instance_sg_name', defaultValue: 'ec2-sg', description: 'sg name')
         string(name: 'ami', defaultValue: 'ami-09298640a92b2d12c', description: 'ami here')
         string(name: 'instance_type', defaultValue: 't2.micro', description: 'instance type')
@@ -88,7 +88,7 @@ pipeline {
 
         stage('Instance Checkout') {
             steps {
-                git branch: 'dev-1', url: 'https://github.com/juleshkumar/jenkins-ec2.git'
+                git branch: 'dev-1', url: 'https://github.com/juleshkumar/new-test.git'
             }
         }
 
