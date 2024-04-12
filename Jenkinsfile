@@ -39,7 +39,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 script {
-                    dir('terraform_apply_workspace') {
+                    dir('vpc_workspace') {
                     sh 'terraform init'
                     sh "terraform plan -out tfplan \
                             -var 'name=${params.name}' \
@@ -99,7 +99,7 @@ pipeline {
 
         stage('Terraform Apply Stage 2') {
             steps {
-                dir('terraform_apply_stage_2_workspace') {
+                dir('instance_workspace') {
                 script {
                     // Read Terraform outputs from file
                     def tfOutputs = readFile 'outputs.tf'
