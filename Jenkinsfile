@@ -15,10 +15,6 @@ pipeline {
         string(name: 'public_subnet_b_cidr_blocks', defaultValue: '10.0.1.0/24', description: 'enter cidr for public subnet 1b')
         string(name: 'private_subnet_a_cidr_blocks', defaultValue: '10.0.2.0/24', description: 'enter cidr for pvt subnet 1a')
         string(name: 'private_subnet_b_cidr_blocks', defaultValue: '10.0.3.0/24', description: 'enter cidr for pvt subnet 1b')
-        string(name: 'instance_sg_name', defaultValue: 'ec2-sg', description: 'sg name')
-        string(name: 'ami', defaultValue: 'ami-09298640a92b2d12c', description: 'ami here')
-        string(name: 'instance_type', defaultValue: 't2.micro', description: 'instance type')
-        string(name: 'key_pair', defaultValue: 'jenkins-test-server2-keypair', description: 'key pair ')
     }
 
     environment {
