@@ -109,7 +109,6 @@ pipeline {
                     def param1Value = parsedOutputs.public_subnet_a_ids.value
                     def param2Value = parsedOutputs.vpc_id.value
 
-                    sh 'terraform init'
                     sh "terraform plan -out tfplan \
                             -var 'instance_sg_name=${params.instance_sg_name}' \
                             -var 'ami=${params.ami}' \
