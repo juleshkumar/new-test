@@ -111,6 +111,9 @@ pipeline {
 
                     sh "terraform plan -out tfplan \
                             -var 'instance_sg_name=${params.instance_sg_name}' \
+                            -var 'region=${env.AWS_DEFAULT_REGION}' \
+                            -var 'access_key=${env.AWS_ACCESS_KEY_ID}' \
+                            -var 'secret_key=${env.AWS_SECRET_ACCESS_KEY}' \
                             -var 'ami=${params.ami}' \
                             -var 'vpc_id=${param2Value}' \
                             -var 'instance_type=${params.instance_type}' \
@@ -130,6 +133,9 @@ pipeline {
                         sh "terraform ${params.action} --auto-approve \
                                 -var 'instance_sg_name=${params.instance_sg_name}' \
                                 -var 'ami=${params.ami}' \
+                                -var 'region=${env.AWS_DEFAULT_REGION}' \
+                                -var 'access_key=${env.AWS_ACCESS_KEY_ID}' \
+                                -var 'secret_key=${env.AWS_SECRET_ACCESS_KEY}' \
                                 -var 'vpc_id=${param2Value}' \
                                 -var 'instance_type=${params.instance_type}' \
                                 -var 'subnet_id=${param1Value}' \
