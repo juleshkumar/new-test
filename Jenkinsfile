@@ -19,6 +19,8 @@ pipeline {
         string(name: 'ami', defaultValue: 'ami-09298640a92b2d12c', description: 'ami here')
         string(name: 'instance_type', defaultValue: 't2.micro', description: 'instance type')
         string(name: 'key_pair', defaultValue: 'jenkins-test-server2-keypair', description: 'key pair ')
+        string(name: 'vpcid', defaultValue: 'vpc-0612b4cdd72608697', description: 'vpc id here')
+        string(name: 'subnetid', defaultValue: 'subnet-0924996dc843af1b3', description: 'subnet id here')
     }
 
     environment {
@@ -102,19 +104,12 @@ pipeline {
                 script {
                     dir('instance_workspace') {
                     sh 'terraform init'
-                    def tfOutputs = readFile '../vpc_workspace/outputs.tf'
-                    def parsedOutputs = new groovy.json.JsonSlurper().parseText(tfOutputs)
-
-                    // Store output values in environment variables for use in subsequent stages
-                    def param1Value = parsedOutputs.public_subnet_a_ids.value
-                    def param2Value = parsedOutputs.vpc_id.value
-
                     sh "terraform plan -out tfplan \
                             -var 'instance_sg_name=${params.instance_sg_name}' \
                             -var 'ami=${params.ami}' \
-                            -var 'vpc_id=${param2Value}' \
+                            -var 'vpc_id=${params.vpcid}' \
                             -var 'instance_type=${params.instance_type}' \
-                            -var 'subnet_id=${param1Value}' \
+                            -var 'subnet_id=${params.subnetid}' \
                             -var 'key_pair=${params.key_pair}'"
                     sh 'terraform show -no-color tfplan > tfplan.txt'
                         script {
