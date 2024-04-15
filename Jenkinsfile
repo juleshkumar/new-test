@@ -101,14 +101,13 @@ pipeline {
             steps {
                 script {
                     dir('instance_workspace') {
-                    sh 'terraform init'
                     def tfOutputs = readFile '../vpc_workspace/outputs.tf'
                     def parsedOutputs = new groovy.json.JsonSlurper().parseText(tfOutputs)
 
                     // Store output values in environment variables for use in subsequent stages
                     def param1Value = parsedOutputs.public_subnet_a_ids.value
                     def param2Value = parsedOutputs.vpc_id.value
-
+                    sh 'terraform init'
                     sh "terraform plan -out tfplan \
                         -var 'instance_sg_name=${params.instance_sg_name}' \
                         -var 'ami=${params.ami}' \
