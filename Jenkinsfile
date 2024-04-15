@@ -49,8 +49,12 @@ pipeline {
                     sh 'terraform apply -auto-approve tfplan'
 
                     // Extract VPC and subnet IDs from Terraform output
-                    def vpcId = sh(returnStdout: true, script: 'terraform output vpc_id').trim()
-                    def subnetId = sh(returnStdout: true, script: 'terraform output public_subnet_a_ids').trim()
+                    def vpcIdOutput = sh(returnStdout: true, script: 'terraform output vpc_id').trim()
+                    def vpcId = vpcIdOutput.replaceAll('"', '')
+
+                    def subnetIdOutput = sh(returnStdout: true, script: 'terraform output public_subnet_a_ids').trim()
+                    def subnetId = subnetIdOutput.replaceAll('"', '')
+
                     env.VPC_ID = vpcId
                     env.SUBNET_ID = subnetId
                 }
