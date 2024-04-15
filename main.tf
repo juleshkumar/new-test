@@ -1,7 +1,5 @@
 provider "aws" {
   region = "ap-south-1"
-  access_key = "AKIAW3MD7AATXDCNFXOV"
-  secret_key = "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"
 }
 
 resource "aws_security_group" "jumpbox_sg" {
