@@ -15,9 +15,9 @@ pipeline {
         string(name: 'public_subnet_b_cidr_blocks', defaultValue: '10.87.64.0/18', description: 'enter cidr for public subnet 1b')
         string(name: 'private_subnet_a_cidr_blocks', defaultValue: '10.87.128.0/18', description: 'enter cidr for pvt subnet 1a')
         string(name: 'private_subnet_b_cidr_blocks', defaultValue: '10.87.192.0/18', description: 'enter cidr for pvt subnet 1b')
-        string(name: 'instance_sg_name', defaultValue: 'test-ec2-sg', description: 'sg name')
+        string(name: 'instance_sg_name', defaultValue: 'ec2-sg', description: 'sg name')
         string(name: 'ami', defaultValue: 'ami-09298640a92b2d12c', description: 'ami here')
-        string(name: 'instance_type', defaultValue: 't3a.medium', description: 'instance type')
+        string(name: 'instance_type', defaultValue: 't2.micro', description: 'instance type')
         string(name: 'key_pair', defaultValue: 'jenkins-test-server2-keypair', description: 'key pair ')
     }
 
@@ -100,31 +100,41 @@ pipeline {
         stage('Terraform Apply Stage 2') {
             steps {
                 script {
-            dir('instance_workspace') {
-                sh 'terraform init'
-                def tfOutputs = readFile '../vpc_workspace/outputs.tf'
-                def parsedOutputs = new groovy.json.JsonSlurper().parseText(tfOutputs)
+                    dir('instance_workspace') {
+                    sh 'terraform init'
+                    def tfOutputs = readFile '../vpc_workspace/outputs.tf'
+                    def parsedOutputs = new groovy.json.JsonSlurper().parseText(tfOutputs)
 
-                // Store output values in environment variables for use in subsequent stages
-                def param1Value = parsedOutputs.public_subnet_a_ids.value
-                def param2Value = parsedOutputs.vpc_id.value
+                    // Store output values in environment variables for use in subsequent stages
+                    def param1Value = parsedOutputs.public_subnet_a_ids.value
+                    def param2Value = parsedOutputs.vpc_id.value
 
-                if (params.action == 'apply') {
-                    sh "terraform ${params.action} --auto-approve \
+                    sh "terraform plan -out tfplan \
                             -var 'instance_sg_name=${params.instance_sg_name}' \
                             -var 'ami=${params.ami}' \
                             -var 'vpc_id=${param2Value}' \
                             -var 'instance_type=${params.instance_type}' \
                             -var 'subnet_id=${param1Value}' \
                             -var 'key_pair=${params.key_pair}'"
-                } else if (params.action == 'destroy') {
-                    sh "terraform ${params.action} --auto-approve \
-                            -var 'instance_sg_name=${params.instance_sg_name}' \
-                            -var 'ami=${params.ami}' \
-                            -var 'vpc_id=${param2Value}' \
-                            -var 'instance_type=${params.instance_type}' \
-                            -var 'subnet_id=${param1Value}' \
-                            -var 'key_pair=${params.key_pair}'"
+                    sh 'terraform show -no-color tfplan > tfplan.txt'
+                        script {
+                    if (params.action == 'apply') {
+                        if (!params.autoApprove) {
+                            def plan = readFile 'tfplan.txt'
+                            input message: "Do you want to apply the plan?",
+                            parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                        }
+
+                        sh "terraform ${params.action} -input=false tfplan"
+                    } else if (params.action == 'destroy') {
+                        sh "terraform ${params.action} --auto-approve \
+                                -var 'instance_sg_name=${params.instance_sg_name}' \
+                                -var 'ami=${params.ami}' \
+                                -var 'vpc_id=${param2Value}' \
+                                -var 'instance_type=${params.instance_type}' \
+                                -var 'subnet_id=${param1Value}' \
+                                -var 'key_pair=${params.key_pair}'"
+                                
                     } else {
                         error "Invalid action selected. Please choose either 'apply' or 'destroy'."
                     }
@@ -135,3 +145,4 @@ pipeline {
             }
         }
     }
+}
