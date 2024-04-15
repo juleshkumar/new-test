@@ -69,6 +69,7 @@ pipeline {
                     def tfPlanCmd = "terraform plan -out instance_tfplan " +
                                     "-var 'instance_sg_name=${params.instance_sg_name}' " +
                                     "-var 'ami=${params.ami}' " +
+                                    "-var 'region=${env.AWS_DEFAULT_REGION}' " +
                                     "-var 'instance_type=${params.instance_type}' " +
                                     "-var 'key_pair=${params.key_pair}' " +
                                     "-var 'vpc_id=${env.VPC_ID}' " +
@@ -88,6 +89,7 @@ pipeline {
                            "-var 'ami=${params.ami}' " +
                            "-var 'instance_type=${params.instance_type}' " +
                            "-var 'key_pair=${params.key_pair}' " +
+                           "-var 'region=${env.AWS_DEFAULT_REGION}' " +
                            "-var 'vpc_id=${env.VPC_ID}' " +
                            "-var 'subnet_id=${env.SUBNET_ID}'"
                     } else {
