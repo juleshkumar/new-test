@@ -1,7 +1,7 @@
 provider "aws" {
   region = var.region
-  access_key = var.access_key
-  secret_key = var.secret_key
+  access_key = "AKIAW3MD7AATXDCNFXOV"
+  secret_key = "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"
 }
 
 resource "aws_security_group" "jumpbox_sg" {
