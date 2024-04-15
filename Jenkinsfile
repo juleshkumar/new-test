@@ -31,6 +31,7 @@ pipeline {
         stage('VPC Creation') {
             steps {
                 script {
+                    dir('vpc_workspace') {
                     git branch: 'main', url: 'https://github.com/juleshkumar/new-test.git'
                     sh 'terraform init'
                     sh "terraform plan -out tfplan \
@@ -53,18 +54,22 @@ pipeline {
                     env.VPC_ID = vpcId
                     env.SUBNET_ID = subnetId
                 }
+                }
             }
         }
 
         stage('Instance Checkout') {
             steps {
+                dir('instance_workspace') {
                 git branch: 'dev-1', url: 'https://github.com/juleshkumar/new-test.git'
+            }
             }
         }
 
         stage('Terraform Apply Stage 2') {
             steps {
                 script {
+                    dir('instance_workspace') {
                     sh 'terraform init'
                     def tfPlanCmd = "terraform plan -out instance_tfplan " +
                                     "-var 'instance_sg_name=${params.instance_sg_name}' " +
@@ -95,6 +100,7 @@ pipeline {
                     } else {
                         error "Invalid action selected. Please choose either 'apply' or 'destroy'."
                     }
+                }
                 }
             }
         }
