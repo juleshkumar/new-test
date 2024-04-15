@@ -116,8 +116,8 @@ pipeline {
                         -var 'instance_type=${params.instance_type}' \
                         -var 'subnet_id=${param1Value}' \
                         -var 'key_pair=${params.key_pair}'"
-                sh 'terraform show -no-color tfplan > tfplan.txt'
-                script {
+                    sh 'terraform show -no-color tfplan > tfplan.txt'
+                        script {
                     if (params.action == 'apply') {
                         if (!params.autoApprove) {
                             def plan = readFile 'tfplan.txt'
