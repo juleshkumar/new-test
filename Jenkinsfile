@@ -19,6 +19,8 @@ pipeline {
         string(name: 'ami', defaultValue: 'ami-09298640a92b2d12c', description: 'ami here')
         string(name: 'instance_type', defaultValue: 't3a.medium', description: 'instance type')
         string(name: 'key_pair', defaultValue: 'jenkins-test-server2-keypair', description: 'key pair ')
+        string(name: 'access_key', defaultValue: '', description: 'access key')
+        string(name: 'secret_key', defaultValue: '', description: 'secret key')
     }
 
     environment {
@@ -112,8 +114,8 @@ pipeline {
                     sh "terraform plan -out tfplan \
                             -var 'instance_sg_name=${params.instance_sg_name}' \
                             -var 'region=${env.AWS_DEFAULT_REGION}' \
-                            -var 'access_key=${env.AWS_ACCESS_KEY_ID}' \
-                            -var 'secret_key=${env.AWS_SECRET_ACCESS_KEY}' \
+                            -var 'access_key=${params.access_key}' \
+                            -var 'secret_key=${params.secret_key}' \
                             -var 'ami=${params.ami}' \
                             -var 'vpc_id=${param2Value}' \
                             -var 'instance_type=${params.instance_type}' \
@@ -134,8 +136,8 @@ pipeline {
                                 -var 'instance_sg_name=${params.instance_sg_name}' \
                                 -var 'ami=${params.ami}' \
                                 -var 'region=${env.AWS_DEFAULT_REGION}' \
-                                -var 'access_key=${env.AWS_ACCESS_KEY_ID}' \
-                                -var 'secret_key=${env.AWS_SECRET_ACCESS_KEY}' \
+                                -var 'access_key=${params.access_key}' \
+                                -var 'secret_key=${params.secret_key}' \
                                 -var 'vpc_id=${param2Value}' \
                                 -var 'instance_type=${params.instance_type}' \
                                 -var 'subnet_id=${param1Value}' \
