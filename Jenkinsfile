@@ -31,7 +31,7 @@ pipeline {
         stage('VPC Creation') {
             steps {
                 script {
-                    git branch: 'main', url: 'https://github.com/juleshkumar/jenkins-vpc.git'
+                    git branch: 'main', url: 'https://github.com/juleshkumar/new-test.git'
                     sh 'terraform init'
                     sh "terraform plan -out tfplan \
                             -var 'name=${params.name}' \
@@ -58,7 +58,7 @@ pipeline {
 
         stage('Instance Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/juleshkumar/jenkins-ec2.git'
+                git branch: 'dev-1', url: 'https://github.com/juleshkumar/new-test.git'
             }
         }
 
