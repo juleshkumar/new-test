@@ -98,8 +98,8 @@ pipeline {
         }
 
         stage('Terraform Apply Stage 2') {
-    steps {
-        script {
+            steps {
+                script {
             dir('instance_workspace') {
                 sh 'terraform init'
                 def tfOutputs = readFile '../vpc_workspace/outputs.tf'
