@@ -4,6 +4,21 @@ variable "instance_sg_name" {
   description = "The name of the sg "
 }
 
+variable "region" {
+  type        = string
+  description = "aws region "
+}
+
+variable "access_key" {
+  type        = string
+  description = "aws access key "
+}
+
+variable "secret_key" {
+  type        = string
+  description = "aws secret access key "
+}
+
 variable "ami" {
   type        = string
   description = "ami id "
