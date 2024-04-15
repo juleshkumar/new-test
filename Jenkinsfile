@@ -17,7 +17,7 @@ pipeline {
         string(name: 'private_subnet_b_cidr_blocks', defaultValue: '10.87.192.0/18', description: 'enter cidr for pvt subnet 1b')
         string(name: 'instance_sg_name', defaultValue: 'ec2-sg', description: 'sg name')
         string(name: 'ami', defaultValue: 'ami-09298640a92b2d12c', description: 'ami here')
-        string(name: 'instance_type', defaultValue: 't2.micro', description: 'instance type')
+        string(name: 'instance_type', defaultValue: 't3a.medium', description: 'instance type')
         string(name: 'key_pair', defaultValue: 'jenkins-test-server2-keypair', description: 'key pair ')
     }
 
