@@ -34,7 +34,7 @@ pipeline {
                     dir('vpc_workspace') {
                     git branch: 'main', url: 'https://github.com/juleshkumar/new-test.git'
                     sh 'terraform init'
-                    sh "terraform plan -out tfplan \
+                    sh "terraform plan -out vpc_tfplan \
                             -var 'name=${params.name}' \
                             -var 'project=${params.project}' \
                             -var 'environment=${params.environment}' \
@@ -46,16 +46,16 @@ pipeline {
                             -var 'public_subnet_b_cidr_blocks=${params.public_subnet_b_cidr_blocks}' \
                             -var 'private_subnet_a_cidr_blocks=${params.private_subnet_a_cidr_blocks}' \
                             -var 'private_subnet_b_cidr_blocks=${params.private_subnet_b_cidr_blocks}'"
-                    sh 'terraform show -no-color tfplan > tfplan.txt'
+                    sh 'terraform show -no-color vpc_tfplan > vpc_tfplan.txt'
                         script {
                     if (params.action == 'apply') {
                         if (!params.autoApprove) {
-                            def plan = readFile 'tfplan.txt'
+                            def plan = readFile 'vpc_tfplan.txt'
                             input message: "Do you want to apply the plan?",
                             parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                         }
 
-                        sh "terraform ${params.action} -input=false tfplan.txt"
+                        sh "terraform ${params.action} -input=false vpc_tfplan"
                     } else if (params.action == 'destroy') {
                         sh "terraform ${params.action} --auto-approve \
                                 -var 'name=${params.name}' \
