@@ -46,7 +46,34 @@ pipeline {
                             -var 'public_subnet_b_cidr_blocks=${params.public_subnet_b_cidr_blocks}' \
                             -var 'private_subnet_a_cidr_blocks=${params.private_subnet_a_cidr_blocks}' \
                             -var 'private_subnet_b_cidr_blocks=${params.private_subnet_b_cidr_blocks}'"
-                    sh 'terraform apply -auto-approve tfplan'
+                    sh 'terraform show -no-color tfplan > tfplan.txt'
+                        script {
+                    if (params.action == 'apply') {
+                        if (!params.autoApprove) {
+                            def plan = readFile 'tfplan.txt'
+                            input message: "Do you want to apply the plan?",
+                            parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                        }
+
+                        sh "terraform ${params.action} -input=false tfplan.txt"
+                    } else if (params.action == 'destroy') {
+                        sh "terraform ${params.action} --auto-approve \
+                                -var 'name=${params.name}' \
+                                -var 'project=${params.project}' \
+                                -var 'environment=${params.environment}' \
+                                -var 'region=${params.region}' \
+                                -var 'cidr_block=${params.cidr_block}' \
+                                -var 'availability_zone_one=${params.availability_zone_one}' \
+                                -var 'availability_zone_two=${params.availability_zone_two}' \
+                                -var 'public_subnet_a_cidr_blocks=${params.public_subnet_a_cidr_blocks}' \
+                                -var 'public_subnet_b_cidr_blocks=${params.public_subnet_b_cidr_blocks}' \
+                                -var 'private_subnet_a_cidr_blocks=${params.private_subnet_a_cidr_blocks}' \
+                                -var 'private_subnet_b_cidr_blocks=${params.private_subnet_b_cidr_blocks}'"
+                    } else {
+                        error "Invalid action selected. Please choose either 'apply' or 'destroy'."
+                    }
+
+            }
 
                     // Extract VPC and subnet IDs from Terraform output
                     def vpcIdOutput = sh(returnStdout: true, script: 'terraform output vpc_id').trim()
@@ -64,21 +91,16 @@ pipeline {
 
         stage('Instance Checkout') {
             steps {
-                dir('instance_workspace') {
-                git branch: 'dev-1', url: 'https://github.com/juleshkumar/new-test.git'
-            }
-            }
-        }
-
-        stage('Terraform Apply Stage 2') {
-            steps {
                 script {
                     dir('instance_workspace') {
+                    git branch: 'dev-1', url: 'https://github.com/juleshkumar/new-test.git'
                     sh 'terraform init'
                     def tfPlanCmd = "terraform plan -out instance_tfplan " +
                                     "-var 'instance_sg_name=${params.instance_sg_name}' " +
                                     "-var 'ami=${params.ami}' " +
                                     "-var 'region=${env.AWS_DEFAULT_REGION}' " +
+                                    "-var 'access_key=${env.AWS_ACCESS_KEY_ID}' " +
+                                    "-var 'secret_key=${env.AWS_SECRET_ACCESS_KEY}' " +
                                     "-var 'instance_type=${params.instance_type}' " +
                                     "-var 'key_pair=${params.key_pair}' " +
                                     "-var 'vpc_id=${env.VPC_ID}' " +
@@ -98,6 +120,8 @@ pipeline {
                            "-var 'ami=${params.ami}' " +
                            "-var 'instance_type=${params.instance_type}' " +
                            "-var 'key_pair=${params.key_pair}' " +
+                           "-var 'access_key=${env.AWS_ACCESS_KEY_ID}' " +
+                           "-var 'secret_key=${env.AWS_SECRET_ACCESS_KEY}' " +
                            "-var 'region=${env.AWS_DEFAULT_REGION}' " +
                            "-var 'vpc_id=${env.VPC_ID}' " +
                            "-var 'subnet_id=${env.SUBNET_ID}'"
