@@ -46,16 +46,16 @@ pipeline {
                             -var 'public_subnet_b_cidr_blocks=${params.public_subnet_b_cidr_blocks}' \
                             -var 'private_subnet_a_cidr_blocks=${params.private_subnet_a_cidr_blocks}' \
                             -var 'private_subnet_b_cidr_blocks=${params.private_subnet_b_cidr_blocks}'"
-                    sh 'terraform show -no-color tfplan > vpc_tfplan.txt'
+                    sh 'terraform show -no-color tfplan > tfplan.txt'
                         script {
                     if (params.action == 'apply') {
                         if (!params.autoApprove) {
-                            def plan = readFile 'vpc_tfplan.txt'
+                            def plan = readFile 'tfplan.txt'
                             input message: "Do you want to apply the plan?",
                             parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                         }
 
-                        sh "terraform ${params.action} -input=false vpc_tfplan.txt"
+                        sh "terraform ${params.action} -input=false tfplan.txt"
                     } else if (params.action == 'destroy') {
                         sh "terraform ${params.action} --auto-approve \
                                 -var 'name=${params.name}' \
