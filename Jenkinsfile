@@ -81,16 +81,16 @@ pipeline {
                     def vpcId = vpcIdOutput.replaceAll('"', '')
 
                     def subnetId1Output = sh(returnStdout: true, script: 'terraform output public_subnet_a_ids').trim()
-                    def subnetId1 = subnetIdOutput.replaceAll('"', '')
+                    def subnetId1 = subnetId1Output.replaceAll('"', '')
 
                     def subnetId2Output = sh(returnStdout: true, script: 'terraform output public_subnet_b_ids').trim()
-                    def subnetId2 = subnetIdOutput.replaceAll('"', '')
+                    def subnetId2 = subnetId2Output.replaceAll('"', '')
 
                     def subnetId3Output = sh(returnStdout: true, script: 'terraform output private_subnet_a_ids').trim()
-                    def subnetId3 = subnetIdOutput.replaceAll('"', '')
+                    def subnetId3 = subnetId3Output.replaceAll('"', '')
 
                     def subnetId4Output = sh(returnStdout: true, script: 'terraform output private_subnet_b_ids').trim()
-                    def subnetId4 = subnetIdOutput.replaceAll('"', '')
+                    def subnetId4 = subnetId4Output.replaceAll('"', '')
 
                     env.VPC_ID = vpcId
                     env.SUBNET_ID1 = subnetId1
