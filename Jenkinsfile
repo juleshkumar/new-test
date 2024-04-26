@@ -19,6 +19,7 @@ pipeline {
         string(name: 'ami', defaultValue: 'ami-09298640a92b2d12c', description: 'ami here')
         string(name: 'instance_type', defaultValue: 't3a.medium', description: 'instance type')
         string(name: 'key_pair', defaultValue: 'jenkins-test-server2-keypair', description: 'key pair ')
+        string(name: 'efs_name', defaultValue: 'test-efs', description: 'efs name ')
     }
 
     environment {
@@ -79,17 +80,29 @@ pipeline {
                     def vpcIdOutput = sh(returnStdout: true, script: 'terraform output vpc_id').trim()
                     def vpcId = vpcIdOutput.replaceAll('"', '')
 
-                    def subnetIdOutput = sh(returnStdout: true, script: 'terraform output public_subnet_a_ids').trim()
-                    def subnetId = subnetIdOutput.replaceAll('"', '')
+                    def subnetId1Output = sh(returnStdout: true, script: 'terraform output public_subnet_a_ids').trim()
+                    def subnetId1 = subnetIdOutput.replaceAll('"', '')
+
+                    def subnetId2Output = sh(returnStdout: true, script: 'terraform output public_subnet_b_ids').trim()
+                    def subnetId2 = subnetIdOutput.replaceAll('"', '')
+
+                    def subnetId3Output = sh(returnStdout: true, script: 'terraform output private_subnet_a_ids').trim()
+                    def subnetId3 = subnetIdOutput.replaceAll('"', '')
+
+                    def subnetId4Output = sh(returnStdout: true, script: 'terraform output private_subnet_b_ids').trim()
+                    def subnetId4 = subnetIdOutput.replaceAll('"', '')
 
                     env.VPC_ID = vpcId
-                    env.SUBNET_ID = subnetId
+                    env.SUBNET_ID1 = subnetId1
+                    env.SUBNET_ID2 = subnetId2
+                    env.SUBNET_ID3 = subnetId3
+                    env.SUBNET_ID4 = subnetId4
                 }
                 }
             }
         }
 
-        stage('Instance Checkout') {
+        stage('Instance') {
             steps {
                 script {
                     dir('instance_workspace') {
@@ -104,7 +117,7 @@ pipeline {
                                     "-var 'instance_type=${params.instance_type}' " +
                                     "-var 'key_pair=${params.key_pair}' " +
                                     "-var 'vpc_id=${env.VPC_ID}' " +
-                                    "-var 'subnet_id=${env.SUBNET_ID}'"
+                                    "-var 'subnet_id=${env.SUBNET_ID1}'"
                     sh tfPlanCmd
                     sh 'terraform show -no-color instance_tfplan > instance_tfplan.txt'
 
@@ -124,7 +137,43 @@ pipeline {
                            "-var 'secret_key=${env.AWS_SECRET_ACCESS_KEY}' " +
                            "-var 'region=${env.AWS_DEFAULT_REGION}' " +
                            "-var 'vpc_id=${env.VPC_ID}' " +
-                           "-var 'subnet_id=${env.SUBNET_ID}'"
+                           "-var 'subnet_id=${env.SUBNET_ID1}'"
+                    } else {
+                        error "Invalid action selected. Please choose either 'apply' or 'destroy'."
+                    }
+                }
+                }
+            }
+        }
+
+        stage('EFS') {
+            steps {
+                script {
+                    dir('efs_workspace') {
+                    git branch: 'dev-2', url: 'https://github.com/juleshkumar/new-test.git'
+                    sh 'terraform init'
+                    def tfPlanCmd = "terraform plan -out instance_tfplan " +
+                                    "-var 'sub2_id=${env.SUBNET_ID4}' " +
+                                    "-var 'efs_name=${params.efs_name}' " +
+                                    "-var 'vpc_id=${env.VPC_ID}' " +
+                                    "-var 'region=${env.AWS_DEFAULT_REGION}' " +
+                                    "-var 'sub1_id=${env.SUBNET_ID3}'"
+                    sh tfPlanCmd
+                    sh 'terraform show -no-color efs_tfplan > efs_tfplan.txt'
+
+                    if (params.action == 'apply') {
+                        if (!params.autoApprove) {
+                            def plan = readFile 'efs_tfplan.txt'
+                            input message: "Do you want to apply the plan?",
+                                  parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                        }
+                        sh "terraform ${params.action} -input=false efs_tfplan"
+                    } else if (params.action == 'destroy') {
+                        sh "terraform ${params.action} --auto-approve -var 'sub2_id=${env.SUBNET_ID4}' " +
+                                    "-var 'efs_name=${params.efs_name}' " +
+                                    "-var 'vpc_id=${env.VPC_ID}' " +
+                                    "-var 'region=${env.AWS_DEFAULT_REGION}' " +
+                                    "-var 'sub1_id=${env.SUBNET_ID3}'"
                     } else {
                         error "Invalid action selected. Please choose either 'apply' or 'destroy'."
                     }
