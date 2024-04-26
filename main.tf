@@ -6,7 +6,7 @@ resource "aws_security_group" "efs_sg" {
   ingress {
     from_port   = 0
     to_port     = 0
-    protocol    = "tcp"
+    protocol    = "-1"
     cidr_blocks = ["10.87.0.0/16"]
   }
 
@@ -26,9 +26,14 @@ resource "aws_efs_file_system" "efs" {
   }
 }
 
-resource "aws_efs_mount_target" "mount_targets" {
-  count           = length(var.subnet_ids)
+resource "aws_efs_mount_target" "mount_target_1" {
   file_system_id  = aws_efs_file_system.efs.id
-  subnet_id       = ["var.sub1_id", "var.sub2_id"]
+  subnet_id       = var.sub1_id
+  security_groups = [aws_security_group.efs_sg.id]
+}
+
+resource "aws_efs_mount_target" "mount_target_2" {
+  file_system_id  = aws_efs_file_system.efs.id
+  subnet_id       = var.sub2_id
   security_groups = [aws_security_group.efs_sg.id]
 }
