@@ -152,7 +152,7 @@ pipeline {
                     dir('efs_workspace') {
                     git branch: 'dev-2', url: 'https://github.com/juleshkumar/new-test.git'
                     sh 'terraform init'
-                    def tfPlanCmd = "terraform plan -out instance_tfplan " +
+                    def tfPlanCmd = "terraform plan -out efs_tfplan " +
                                     "-var 'sub2_id=${env.SUBNET_ID4}' " +
                                     "-var 'efs_name=${params.efs_name}' " +
                                     "-var 'vpc_id=${env.VPC_ID}' " +
