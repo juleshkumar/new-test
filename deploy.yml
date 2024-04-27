@@ -5,6 +5,6 @@
   tasks:
     - name: Create directory
       file:
-        path: /var/lib/jenkins/demodir
+        path: /var/lib/demodir
         state: directory
       remote_user: ubuntu
