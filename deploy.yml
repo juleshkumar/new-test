@@ -1,4 +1,3 @@
-User
 - name: Deploy to EC2 instance
   hosts: ec2
   become: yes
