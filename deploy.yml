@@ -1,12 +1,8 @@
-- name: Deploy to EC2 instance
+- name: Create directory
   hosts: ec2
   become: yes
-  gather_facts: no  # Disable gathering facts
-  vars:
-    ansible_ssh_private_key_file: "/var/lib/jenkins/keypairs/jenkins-test-server2-keypair.pem"
+  gather_facts: no
   tasks:
     - name: Create directory
-      file:
-        path: /var/lib/demodir
-        state: directory
+      raw: mkdir -p /var/lib/demodir
       remote_user: ubuntu
