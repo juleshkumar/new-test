@@ -1,0 +1,10 @@
+---
+- name: Deploy to EC2 instance
+  hosts: ec2
+  become: yes
+  tasks:
+    - name: Create directory
+      file:
+        path: /var/lib/jenkins/demodir
+        state: directory
+      remote_user: ubuntu
