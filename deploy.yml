@@ -4,5 +4,5 @@
   gather_facts: no
   tasks:
     - name: Create directory
-      shell: mkdir -p /var/lib/demo111
+      raw: mkdir -p /var/lib/demodir
       remote_user: ubuntu
