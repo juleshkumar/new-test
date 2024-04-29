@@ -1,10 +1,8 @@
-- name: Create directory and set permissions
+- name: Create directory
   hosts: ec2
   become: yes
   gather_facts: no
   tasks:
-    - name: Create directory and set permissions
-      shell: |
-        mkdir -p /var/lib/demodir &&
-        chmod 0755 /var/lib/demodir
+    - name: Create directory
+      shell: mkdir -p /var/lib/demodir
       remote_user: ubuntu
