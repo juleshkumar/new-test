@@ -3,13 +3,12 @@
   become: yes
   gather_facts: no
   tasks:
-    - name: Create directories
-      file:
-        path: "{{ item.path }}"
-        state: directory
-        mode: "{{ item.mode }}"
-      loop:
-        - { path: '/home/ubuntu/efs', mode: '0777' }
-        - { path: '/home/ubuntu/efs/consul', mode: '0755' }
-        - { path: '/home/ubuntu/efs/consul/demo', mode: '0700' }
+    - name: Create directories and set permissions
+      shell: |
+        mkdir -p /home/ubuntu/efs /home/ubuntu/efs/consul /home/ubuntu/efs/consul/demo &&
+        chmod 0777 /home/ubuntu/efs &&
+        chmod 0755 /home/ubuntu/efs/consul &&
+        chmod 0700 /home/ubuntu/efs/consul/demo
+      args:
+        executable: /bin/bash
       remote_user: ubuntu
