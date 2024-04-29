@@ -5,10 +5,10 @@
   tasks:
     - name: Create directories and set permissions
       shell: |
-        mkdir -p /home/ubuntu/efs /home/ubuntu/efs/consul /home/ubuntu/efs/consul/demo &&
-        chmod 0777 /home/ubuntu/efs &&
-        chmod 0755 /home/ubuntu/efs/consul &&
-        chmod 0700 /home/ubuntu/efs/consul/demo
+        mkdir -p /home/ubuntu/efs &&
+        chmod 0755 //home/ubuntu/efs &&
+        mkdir -p /home/ubuntu/efs/consul &&
+        chmod 0700 /home/ubuntu/efs/consul
       args:
         executable: /bin/bash
       remote_user: ubuntu
