@@ -1,8 +1,15 @@
-- name: Create directory
+- name: Create directories and set permissions
   hosts: ec2
   become: yes
   gather_facts: no
   tasks:
-    - name: Create directory
-      raw: mkdir -p /var/lib/demodir
+    - name: Create directories
+      file:
+        path: "{{ item.path }}"
+        state: directory
+        mode: "{{ item.mode }}"
+      loop:
+        - { path: '/home/ubuntu/efs', mode: '0777' }
+        - { path: '/home/ubuntu/efs/consul', mode: '0755' }
+        - { path: '/home/ubuntu/efs/consul/demo', mode: '0700' }
       remote_user: ubuntu
