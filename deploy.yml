@@ -5,8 +5,8 @@
   tasks:
     - name: Create directories and set permissions
       shell: |
-        mkdir -p /home/ubuntu/efs &&
-        chmod 0755 //home/ubuntu/efs &&
-        mkdir -p /home/ubuntu/efs/consul &&
-        chmod 0700 /home/ubuntu/efs/consul
+        mkdir -p /var/lib/demodir &&
+        chmod 0755 /var/lib/demodir &&
+        mkdir -p /var/lib/anotherdir &&
+        chmod 0700 /var/lib/anotherdir
       remote_user: ubuntu
