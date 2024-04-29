@@ -9,6 +9,4 @@
         chmod 0755 //home/ubuntu/efs &&
         mkdir -p /home/ubuntu/efs/consul &&
         chmod 0700 /home/ubuntu/efs/consul
-      args:
-        executable: /bin/bash
       remote_user: ubuntu
