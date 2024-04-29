@@ -1,8 +1,8 @@
-- name: Create directory
+- name: Create directories and set permissions
   hosts: ec2
   become: yes
   gather_facts: no
   tasks:
-    - name: Create directory
-      raw: mkdir -p /var/lib/demodir
+    - name: Create directories and set permissions
+      raw: mkdir -p /home/ubuntu/efs && chmod 0755 /home/ubuntu/efs && mkdir -p /home/ubuntu/efs/demo && chmod 0777 /home/ubuntu/efs/demo
       remote_user: ubuntu
