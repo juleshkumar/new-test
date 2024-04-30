@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     git branch: 'dev-4', url: 'https://github.com/juleshkumar/new-test.git'
-                    sh "ansible-playbook -i inventory.ini deploy.yml --extra-vars 'EC2_IP=${params.INSTANCE_PUBLIC_IP}'"
+                    sh "ansible-playbook -i inventory.ini deploy.yml"
                 }
             }
         }
