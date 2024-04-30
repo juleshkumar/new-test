@@ -1,4 +1,3 @@
-[3:10 PM] Julesh Kumar Ganipisetti
 pipeline {
     agent any
  
