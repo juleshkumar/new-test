@@ -1,8 +1,52 @@
-- name: Create directories and set permissions
+- name: Attach EFS to server
   hosts: ec2
   become: yes
   gather_facts: no
   tasks:
+    - name: Create directory
+      raw: mkdir -p /home/ubuntu/efs
+      remote_user: ubuntu
+
+    - name: Install nfs-common
+      raw: apt-get install -y nfs-common
+      remote_user: ubuntu
+
+    - name: Mount EFS
+      raw: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport {{ efs_dns_name }}:/ /home/ubuntu/efs
+      remote_user: ubuntu
+
     - name: Create directories and set permissions
-      raw: mkdir -p /home/ubuntu/efs && chmod 0755 /home/ubuntu/efs && mkdir -p /home/ubuntu/efs/demo && chmod 0777 /home/ubuntu/efs/demo
+      raw: |
+        mkdir -p /home/ubuntu/efs/elasticsearch
+        chmod 0755 /home/ubuntu/efs/elasticsearch
+        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-0
+        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-0
+        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-1
+        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-1
+        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-2
+        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-2
+        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-3
+        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-3
+        mkdir -p /home/ubuntu/efs/kafka
+        chmod 0755 /home/ubuntu/efs/kafka
+        mkdir -p /home/ubuntu/efs/kafka/kafka-0
+        chmod 0777 /home/ubuntu/efs/kafka/kafka-0
+        mkdir -p /home/ubuntu/efs/kafka/kafka-1
+        chmod 0777 /home/ubuntu/efs/kafka/kafka-1
+        mkdir -p /home/ubuntu/efs/kafka/kafka-2
+        chmod 0777 /home/ubuntu/efs/kafka/kafka-2
+        mkdir -p /home/ubuntu/efs/kafka/kafka-3
+        chmod 0777 /home/ubuntu/efs/kafka/kafka-3
+        mkdir -p /home/ubuntu/efs/loggingagent
+        chmod 0755 /home/ubuntu/efs/loggingagent
+        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-0
+        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-0
+        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-1
+        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-1
+        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-2
+        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-2
+        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-3
+        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-3
+        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-4
+        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-4
       remote_user: ubuntu
