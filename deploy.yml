@@ -3,16 +3,6 @@
   become: yes
   gather_facts: no
   tasks:
-    - name: Install Python 3
-      become: yes
-      raw: apt-get update && apt-get install -y python3
-      remote_user: ubuntu
-
-    - name: Install AWS CLI
-      become: yes
-      raw: apt-get update && apt-get install -y awscli
-      remote_user: ubuntu
-
     - name: Install snapd
       become: yes
       raw: apt-get update && apt-get install -y snapd
