@@ -14,7 +14,7 @@ pipeline {
         stage('Deploy in EC2') {
             steps {
                 script {
-                    git branch: 'dev-3', url: 'https://github.com/juleshkumar/new-test.git'
+                    git branch: 'dev-5', url: 'https://github.com/juleshkumar/new-test.git'
                     sh "ansible-playbook -i inventory.ini deploy.yml --extra-vars 'ec2_ip=${INSTANCE_PUBLIC_IP} efs_dns_name=${EFS_DNS_NAME}'"
                 }
             }
