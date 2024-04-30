@@ -10,3 +10,7 @@ output "mount_target_2_id" {
   value = aws_efs_mount_target.mount_target_2.id
 }
 
+output "efs_dns_name" {
+  value = aws_efs_file_system.efs.dns_name
+}
+
