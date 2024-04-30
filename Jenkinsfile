@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     git branch: 'dev-5', url: 'https://github.com/juleshkumar/new-test.git'
-                    sh "ansible-playbook -i inventory.ini deploy.yml --extra-vars efs_dns_name=${params.EFS_DNS_NAME}'"
+                    sh "ansible-playbook -i inventory.ini deploy.yml --extra-vars 'efs_dns_name=${params.EFS_DNS_NAME}'"
                 }
             }
         }
