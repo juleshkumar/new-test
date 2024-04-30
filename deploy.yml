@@ -8,7 +8,3 @@
       raw: apt-get update && apt-get install -y snapd
       remote_user: ubuntu
 
-    - name: Install k9s using snap
-      become: yes
-      shell: snap install k9s
-      remote_user: ubuntu
