@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     git branch: 'dev-4', url: 'https://github.com/juleshkumar/new-test.git'
-                    sh "ansible-playbook -e \"ec2_ip=${params.EC2_IP}\" your_playbook.yml"
+                    sh "ansible-playbook -e \"ec2_ip=${params.EC2_IP}\" deploy.yml"
                 }
             }
         }
