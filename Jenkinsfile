@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'EC2_IP', defaultValue: '13.126.222.122', description: 'INSTANCE_PUBLIC_IP ')
+        string(name: 'EC2_IP', defaultValue: '65.0.71.239', description: 'INSTANCE_PUBLIC_IP')
     }
 
     environment {
@@ -14,7 +14,7 @@ pipeline {
             steps {
                 script {
                     git branch: 'dev-4', url: 'https://github.com/juleshkumar/new-test.git'
-                    sh "ansible-playbook -i inventory.ini deploy.yml --extra-vars 'ec2_ip=${EC2_IP}'"
+                    sh "ansible-playbook -e \"ec2_ip=${params.EC2_IP}\" your_playbook.yml"
                 }
             }
         }
