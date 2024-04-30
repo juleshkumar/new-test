@@ -13,13 +13,11 @@ pipeline {
         stage('Deploy in EC2') {
             steps {
                 script {
-                    dir('ansible_workspace') {
-                        def inventoryContent = "[ec2]\n${params.EC2_IP} ansible_user=ubuntu ansible_ssh_private_key_file=/var/lib/jenkins/keypairs/jenkins-test-server2-keypair.pem"
-                        writeFile file: 'inventory.ini', text: inventoryContent
-                    }
+                    def inventoryContent = "[ec2]\n${params.EC2_IP} ansible_user=ubuntu ansible_ssh_private_key_file=/var/lib/jenkins/keypairs/jenkins-test-server2-keypair.pem"
+                    writeFile file: 'inventory.ini', text: inventoryContent
 
                     git branch: 'dev-4', url: 'https://github.com/juleshkumar/new-test.git'
-                    sh "ansible-playbook -i ansible_workspace/inventory.ini deploy.yml"
+                    sh "ansible-playbook -i inventory.ini deploy.yml"
                 }
             }
         }
