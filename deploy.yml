@@ -1,18 +1,12 @@
-- name: Generate inventory file
-  hosts: localhost
-  tasks:
-    - name: Template inventory file
-      template:
-        src: inventory_template.ini
-        dest: inventory.ini
-      vars:
-        ec2_ip: "{{ ec2_ip }}"
-
 - name: installing packages to server
   hosts: ec2
   become: yes
   gather_facts: no
   tasks:
+    - name: Install Python 3
+      become: yes
+      raw: apt-get update && apt-get install -y python3
+      remote_user: ubuntu
     - name: Install snapd
       become: yes
       raw: apt-get update && apt-get install -y snapd
