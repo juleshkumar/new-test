@@ -22,3 +22,8 @@ variable "region" {
   type        = string
   description = "aws region "
 }
+
+variable "cidr_block" {
+  type        = string
+  description = "CIDR block for the VPC"
+}
