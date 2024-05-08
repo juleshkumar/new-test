@@ -11,6 +11,37 @@
       raw: apt-get install -y nfs-common
       remote_user: ubuntu
 
+    - name: Install python3-pip
+      raw: apt-get install -y python3-pip
+      remote_user: ubuntu
+
+    - name: Install awscli
+      raw: snap install aws-cli --classic --channel=stable
+      remote_user: ubuntu
+
+
+    - name: Install git
+      raw: apt-get install -y git
+      remote_user: ubuntu
+
+    - name: Install psql-client
+      raw: apt-get install -y postgresql-client
+      remote_user: ubuntu
+
+    - name: Install redis-tool
+      raw: apt-get install -y redis-tools
+      remote_user: ubuntu
+
+    - name: Install kubectl
+      raw: snap install kubectl --classic --channel=stable
+      remote_user: ubuntu
+
+    - name: Install k9s
+      raw: snap install k9s --channel=stable
+      remote_user: ubuntu
+
+    
+
     - name: Mount EFS
       raw: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport {{ efs_dns_name }}:/ /home/ubuntu/efs
       remote_user: ubuntu
