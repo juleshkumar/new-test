@@ -12,7 +12,9 @@
       remote_user: ubuntu
 
     - name: Install python3-pip
-      raw: apt-get install -y python3-pip
+      raw: |
+        apt-get update
+        apt-get install -y python3-pip
       remote_user: ubuntu
 
     - name: Install awscli
