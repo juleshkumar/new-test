@@ -45,7 +45,7 @@
     - name: Install Helm
       raw: |
         curl -fsSL https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-        sudo apt-add-repository "deb https://baltocdn.com/helm/stable/debian/ all main"
+        sudo apt-add-repository -y "deb https://baltocdn.com/helm/stable/debian/ all main"
         sudo apt update
         sudo apt install -y helm
       remote_user: ubuntu
