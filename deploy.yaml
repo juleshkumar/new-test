@@ -1,0 +1,14 @@
+- name: Attach EFS to server
+  hosts: ec2
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Authorize Security Group Ingress
+      raw: |
+        aws ec2 authorize-security-group-ingress \
+        --group-id {{ sg_id }} \
+        --protocol tcp \
+        --port {{ port }} \
+        --cidr {{ vpc_cidr_block }} \
+        --profile {{ namespace }}
+      remote_user: ubuntu
