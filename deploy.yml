@@ -8,13 +8,13 @@
       remote_user: ubuntu
 
     - name: Install nfs-common
-      raw: apt-get install -y nfs-common
+      raw: |
+        apt-get update
+        apt-get install -y nfs-common
       remote_user: ubuntu
 
     - name: Install python3-pip
-      raw: |
-        apt-get update
-        apt-get install -y python3-pip
+      raw: apt-get install -y python3-pip
       remote_user: ubuntu
 
     - name: Install awscli
@@ -30,8 +30,8 @@
       raw: apt-get install -y postgresql-client
       remote_user: ubuntu
 
-    - name: Install redis-tool
-      raw: apt-get install -y redis-tools
+    - name: Install postgres-tool
+      raw: apt-get install -y postgres-tools
       remote_user: ubuntu
 
     - name: Install kubectl
@@ -50,8 +50,27 @@
         sudo apt install -y helm
       remote_user: ubuntu
 
+    - name: Set AWS access key ID
+      raw: aws configure set aws_access_key_id "{{ aws_access_key_id }}"
+      when: aws_access_key_id is defined
+      remote_user: ubuntu
 
-    
+    - name: Set AWS secret access key
+      raw: aws configure set aws_secret_access_key "{{ aws_secret_access_key }}"
+      when: aws_secret_access_key is defined
+      remote_user: ubuntu
+
+    - name: Set AWS region
+      raw: aws configure set region "{{ aws_region }}"
+      when: aws_region is defined
+      remote_user: ubuntu
+
+    - name: Set AWS output format
+      raw: aws configure set output "{{ aws_output_format }}"
+      when: aws_output_format is defined
+      remote_user: ubuntu
+
+
 
     - name: Mount EFS
       raw: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport {{ efs_dns_name }}:/ /home/ubuntu/efs
@@ -69,6 +88,30 @@
         chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-2
         mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-3
         chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-3
+        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-master-0
+        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-master-0
+        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-master-1
+        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-master-1
+        mkdir -p /home/ubuntu/efs/postgres
+        chmod 0755 /home/ubuntu/efs/postgres
+        mkdir -p /home/ubuntu/efs/postgres/postgres-0
+        chmod 0777 /home/ubuntu/efs/postgres/postgres-0
+        mkdir -p /home/ubuntu/efs/consul
+        chmod 0755 /home/ubuntu/efs/consul
+        mkdir -p /home/ubuntu/efs/consul/consul-0
+        chmod 0777 /home/ubuntu/efs/consul/consul-0
+        mkdir -p /home/ubuntu/efs/consul/consul-1
+        chmod 0777 /home/ubuntu/efs/consul/consul-1
+        mkdir -p /home/ubuntu/efs/consul/consul-2
+        chmod 0777 /home/ubuntu/efs/consul/consul-2
+        mkdir -p /home/ubuntu/efs/redis
+        chmod 0755 /home/ubuntu/efs/redis
+        mkdir -p /home/ubuntu/efs/redis/redis-0
+        chmod 0777 /home/ubuntu/efs/redis/redis-0
+        mkdir -p /home/ubuntu/efs/redis/redis-1
+        chmod 0777 /home/ubuntu/efs/redis/redis-1
+        mkdir -p /home/ubuntu/efs/redis/redis-2
+        chmod 0777 /home/ubuntu/efs/redis/redis-2
         mkdir -p /home/ubuntu/efs/kafka
         chmod 0755 /home/ubuntu/efs/kafka
         mkdir -p /home/ubuntu/efs/kafka/kafka-0
@@ -79,16 +122,17 @@
         chmod 0777 /home/ubuntu/efs/kafka/kafka-2
         mkdir -p /home/ubuntu/efs/kafka/kafka-3
         chmod 0777 /home/ubuntu/efs/kafka/kafka-3
-        mkdir -p /home/ubuntu/efs/loggingagent
-        chmod 0755 /home/ubuntu/efs/loggingagent
+        mkdir -p /home/ubuntu/efs/logging-agent
+        chmod 0755 /home/ubuntu/efs/logging-agent
         mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-0
         chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-0
         mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-1
         chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-1
         mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-2
         chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-2
-        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-3
-        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-3
-        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-4
-        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-4
+        
+      remote_user: ubuntu
+
+    - name: Create Kubernetes namespace
+      raw: kubectl create namespace {{ namespace_name }}
       remote_user: ubuntu
