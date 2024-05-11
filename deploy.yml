@@ -30,8 +30,8 @@
       raw: apt-get install -y postgresql-client
       remote_user: ubuntu
 
-    - name: Install postgres-tool
-      raw: apt-get install -y postgres-tools
+    - name: Install redis-tool
+      raw: apt-get install -y redis-tools
       remote_user: ubuntu
 
     - name: Install kubectl
