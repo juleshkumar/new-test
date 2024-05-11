@@ -1,0 +1,20 @@
+- name: Attach EFS to server
+  hosts: ec2
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: replacing accoun id
+      raw: sed -i "s/8376/$account_id/g" /home/ubuntu/eks-dashboard/ecrpolicy.sh
+      remote_user: ubuntu
+
+    - name: jq installation 
+      raw: sudo apt install jq -y
+      remote_user: ubuntu
+
+    - name: changing permission for script.sh
+      raw: chmod 777 /home/ubuntu/eks-dashboard/ecrpolicy.sh
+      remote_user: ubuntu
+
+    - name: bash permission for script.sh
+      raw: bash /home/ubuntu/eks-dashboard/ecrpolicy.sh
+      remote_user: ubuntu
