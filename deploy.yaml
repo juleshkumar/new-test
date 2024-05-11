@@ -1,0 +1,36 @@
+- name: Attach EFS to server
+  hosts: ec2
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Create Kubernetes namespace
+      raw: kubectl create namespace {{ namespace_name }}
+      remote_user: ubuntu
+
+    - name: bitnami repo
+      raw: helm repo add bitnami https://charts.bitnami.com/bitnami
+      remote_user: ubuntu
+
+    - name: consul yaml deployment
+      raw: helm install consul -f /home/ubuntu/helm-charts/consul.yaml bitnami/consul -n {{ namespace }} --version {{ consul_version }}
+      remote_user: ubuntu
+
+    - name: elasticsearch yaml deployment
+      raw: helm install elasticsearch -f /home/ubuntu/helm-charts/elasticsearch.yaml bitnami/elasticsearch -n $namespace --version {{ elasticsearch_version }}
+      remote_user: ubuntu
+
+    - name: zookeeper yaml deployment
+      raw: helm install zokeeper -f /home/ubuntu/helm-charts/zookeeper.yaml bitnami/zookeeper -n $namespace --version {{ zookeeper_version }}
+      remote_user: ubuntu
+
+    - name: kafka yaml deployment
+      raw: helm install kafka -f /home/ubuntu/helm-charts/kafka.yaml bitnami/kafka -n $namespace --version {{ kafka_version }}
+      remote_user: ubuntu
+
+    - name: nginx-ingress-controller yaml deployment
+      raw: helm install nginx -f /home/ubuntu/helm-charts/nginx.yaml bitnami/nginx-ingress-controller -n $namespace --version {{ nginx_ic_version }}
+      remote_user: ubuntu
+
+    - name: redis yaml deployment
+      raw: helm install redis -f /home/ubuntu/helm-charts/redis.yaml bitnami/redis -n $namespace --version {{ redis_version }}
+      remote_user: ubuntu
