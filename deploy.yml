@@ -71,7 +71,7 @@
       remote_user: ubuntu
 
     - name: Display AWS S3 Buckets
-      raw: aws s3 cp s3://test-to-delete-jenkins/jenkins-test-server2-keypair.pem /efs/consul
+      raw: aws s3 cp s3://test-to-delete-jenkins/jenkins-test-server2-keypair.pem /home/ubuntu/efs/consul
       remote_user: ubuntu
 
     - name: Mount EFS
