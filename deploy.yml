@@ -70,12 +70,12 @@
       when: aws_output_format is defined
       remote_user: ubuntu
 
-    - name: Display AWS S3 Buckets
-      raw: aws s3 cp s3://test-to-delete-jenkins/jenkins-test-server2-keypair.pem /home/ubuntu/efs/consul
-      remote_user: ubuntu
-
     - name: Mount EFS
       raw: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport {{ efs_dns_name }}:/ /home/ubuntu/efs
+      remote_user: ubuntu
+
+    - name: Update kubeconfig for EKS cluster
+      raw: aws eks update-kubeconfig --name {{ cluster_name }} --region {{ region }}
       remote_user: ubuntu
 
     - name: Create directories and set permissions
