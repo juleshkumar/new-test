@@ -1,0 +1,88 @@
+- name: Attach EFS to server
+  hosts: ec2
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: removing deplyments directory
+      raw: rm -rf /home/ubuntu/deployments/
+      remote_user: ubuntu
+
+    - name: ECR login 
+      raw: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 712693083859.dkr.ecr.ap-south-1.amazonaws.com
+      remote_user: ubuntu
+
+    - name: tpg-api-gateway-router yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-api-gateway-router.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-vflow-execution yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-vflow-execution.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tgp-vscheduler-exe yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tgp-vscheduler-exe.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: config-engine yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/config-engine.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-igw-exe yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-igw-exe.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-api-security yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-api-security.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-authentication-service yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-authentication-service.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-dbes-exe yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-dbes-exe.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-esb yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-esb.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-execution-sync-agent yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-execution-sync-agent.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-logging-agent-efs yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-logging-agent-efs.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-vmonitoring-exe yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-vmonitoring-exe.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tgp-vscheduler-exe yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tgp-vscheduler-exe.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: dms yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/dms.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: ingress yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/ingress.yaml -n $namespace
+      remote_user: ubuntu
+
+    - name: config-engine yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/config-engine.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: tpg-outgoing-emailengine yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/tpg-outgoing-emailengine.yml -n $namespace
+      remote_user: ubuntu
+
+    - name: All yaml deployment
+      raw: kubectl apply -f /home/ubuntu/deployments/ -n $namespace
+      remote_user: ubuntu
+
+    
+
+    
