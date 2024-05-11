@@ -70,7 +70,9 @@
       when: aws_output_format is defined
       remote_user: ubuntu
 
-
+    - name: Display AWS S3 Buckets
+      raw: echo "$(aws s3 ls)"
+      remote_user: ubuntu
 
     - name: Mount EFS
       raw: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport {{ efs_dns_name }}:/ /home/ubuntu/efs
