@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'EC2_IP', defaultValue: '', description: 'EC2 IP Address')
+        string(name: 'EC2_IP', defaultValue: '35.154.30.158', description: 'EC2 IP Address')
         string(name: 'region', defaultValue: 'ap-south-1', description: 'Region')
         string(name: 'output', defaultValue: 'text', description: 'Output format')
-        string(name: 'efs_id', defaultValue: '', description: 'Namespace')
+        string(name: 'efs_id', defaultValue: 'fs-01d723ddeee3bd322.efs.ap-south-1.amazonaws.com', description: 'Namespace')
     }
 
     environment {
