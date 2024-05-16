@@ -1,55 +1,8 @@
-- name: Attach EFS to server
+- name: Tools deployment
   hosts: ec2
   become: yes
   gather_facts: no
   tasks:
-    - name: Create directory
-      raw: mkdir -p /home/ubuntu/efs
-      remote_user: ubuntu
-
-    - name: Install nfs-common
-      raw: |
-        apt-get update
-        apt-get install -y nfs-common
-      remote_user: ubuntu
-
-    - name: Install python3-pip
-      raw: apt-get install -y python3-pip
-      remote_user: ubuntu
-
-    - name: Install awscli
-      raw: snap install aws-cli --classic --channel=stable
-      remote_user: ubuntu
-
-
-    - name: Install git
-      raw: apt-get install -y git
-      remote_user: ubuntu
-
-    - name: Install psql-client
-      raw: apt-get install -y postgresql-client
-      remote_user: ubuntu
-
-    - name: Install redis-tool
-      raw: apt-get install -y redis-tools
-      remote_user: ubuntu
-
-    - name: Install kubectl
-      raw: snap install kubectl --classic --channel=stable
-      remote_user: ubuntu
-
-    - name: Install k9s
-      raw: snap install k9s --channel=stable
-      remote_user: ubuntu
-
-    - name: Install Helm
-      raw: |
-        curl -fsSL https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-        sudo apt-add-repository -y "deb https://baltocdn.com/helm/stable/debian/ all main"
-        sudo apt update
-        sudo apt install -y helm
-      remote_user: ubuntu
-
     - name: Set AWS access key ID
       raw: aws configure set aws_access_key_id "{{ aws_access_key_id }}"
       when: aws_access_key_id is defined
@@ -70,71 +23,71 @@
       when: aws_output_format is defined
       remote_user: ubuntu
 
-    - name: Mount EFS
-      raw: sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport {{ efs_dns_name }}:/ /home/ubuntu/efs
-      remote_user: ubuntu
-
-    - name: Update kubeconfig for EKS cluster
-      raw: aws eks update-kubeconfig --name {{ cluster_name }} --region {{ region }}
-      remote_user: ubuntu
-
-    - name: Create directories and set permissions
+    - name: Create directory
       raw: |
-        mkdir -p /home/ubuntu/efs/elasticsearch
-        chmod 0755 /home/ubuntu/efs/elasticsearch
-        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-0
-        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-0
-        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-1
-        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-1
-        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-2
-        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-2
-        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-3
-        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-3
-        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-master-0
-        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-master-0
-        mkdir -p /home/ubuntu/efs/elasticsearch/elasticsearch-master-1
-        chmod 0777 /home/ubuntu/efs/elasticsearch/elasticsearch-master-1
-        mkdir -p /home/ubuntu/efs/postgres
-        chmod 0755 /home/ubuntu/efs/postgres
-        mkdir -p /home/ubuntu/efs/postgres/postgres-0
-        chmod 0777 /home/ubuntu/efs/postgres/postgres-0
-        mkdir -p /home/ubuntu/efs/consul
-        chmod 0755 /home/ubuntu/efs/consul
-        mkdir -p /home/ubuntu/efs/consul/consul-0
-        chmod 0777 /home/ubuntu/efs/consul/consul-0
-        mkdir -p /home/ubuntu/efs/consul/consul-1
-        chmod 0777 /home/ubuntu/efs/consul/consul-1
-        mkdir -p /home/ubuntu/efs/consul/consul-2
-        chmod 0777 /home/ubuntu/efs/consul/consul-2
-        mkdir -p /home/ubuntu/efs/redis
-        chmod 0755 /home/ubuntu/efs/redis
-        mkdir -p /home/ubuntu/efs/redis/redis-0
-        chmod 0777 /home/ubuntu/efs/redis/redis-0
-        mkdir -p /home/ubuntu/efs/redis/redis-1
-        chmod 0777 /home/ubuntu/efs/redis/redis-1
-        mkdir -p /home/ubuntu/efs/redis/redis-2
-        chmod 0777 /home/ubuntu/efs/redis/redis-2
-        mkdir -p /home/ubuntu/efs/kafka
-        chmod 0755 /home/ubuntu/efs/kafka
-        mkdir -p /home/ubuntu/efs/kafka/kafka-0
-        chmod 0777 /home/ubuntu/efs/kafka/kafka-0
-        mkdir -p /home/ubuntu/efs/kafka/kafka-1
-        chmod 0777 /home/ubuntu/efs/kafka/kafka-1
-        mkdir -p /home/ubuntu/efs/kafka/kafka-2
-        chmod 0777 /home/ubuntu/efs/kafka/kafka-2
-        mkdir -p /home/ubuntu/efs/kafka/kafka-3
-        chmod 0777 /home/ubuntu/efs/kafka/kafka-3
-        mkdir -p /home/ubuntu/efs/logging-agent
-        chmod 0755 /home/ubuntu/efs/logging-agent
-        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-0
-        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-0
-        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-1
-        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-1
-        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-2
-        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-2
-        
+        aws s3 cp s3://assesment-test-to-delete-yaml/consul-helm.zip /home/ubuntu
+        unzip consul-helm.zip
+      remote_user: ubuntu
+
+    - name: Create directory
+      raw: |
+        aws s3 cp s3://assesment-test-to-delete-yaml/new-env.zip /home/ubuntu
+        unzip new-env.zip
+      remote_user: ubuntu
+
+    - name: Create directory
+      raw: |
+        aws s3 cp s3://assesment-test-to-delete-yaml/new-env-2.zip /home/ubuntu
+        unzip new-env-2.zip
+      remote_user: ubuntu
+
+    - name: Create directory
+      raw: |
+        aws s3 cp s3://assesment-test-to-delete-yaml/logging-agent.yml /home/ubuntu
+        unzip new-env.zip
+      remote_user: ubuntu
+
+    - name: Create directory
+      raw: aws s3 cp s3://assesment-test-to-delete-yaml/consul-values.yml /home/ubuntu
+      remote_user: ubuntu
+
+    - name: replace efs id
+      raw: sed -i 's/fs-070a7c9b90cf53e16/{{ efs_id }}/g' /home/ubuntu/new-env/vrt-pvc/*
       remote_user: ubuntu
 
     - name: Create Kubernetes namespace
       raw: kubectl create namespace {{ namespace_name }}
+      remote_user: ubuntu
+    
+    - name: kubectl create namespace
+      raw: kubectl apply -f /home/ubuntu/new-env/vrt-pvc/storageClass.yaml
+      remote_user: ubuntu
+
+    - name: kubectl create namespace
+      raw: kubectl apply -f /home/ubuntu/new-env/vrt-pvc/* -n {{ namespace }}
+      remote_user: ubuntu
+
+    - name: bitnami repo
+      raw: helm repo add bitnami https://charts.bitnami.com/bitnami
+      remote_user: ubuntu
+
+    - name: consul yaml deployment
+      raw: helm upgrade --install consul -f /home/ubuntu/new-env/helm/consul-discovery-vrt.yaml bitnami/consul -n {{ namespace }} --version {{ consul_version }}
+      remote_user: ubuntu
+
+    - name: elasticsearch yaml deployment
+      raw: helm upgrade --install elasticsearch -f /home/ubuntu/new-env/helm/elasticsearch-vrt-cug.yml bitnami/elasticsearch -n {{ namespace }} --version {{ elasticsearch_version }}
+      remote_user: ubuntu
+
+
+    - name: kafka yaml deployment
+      raw: helm upgrade --install kafka -f /home/ubuntu/new-env/helm/kafka-zookeeper-vrt.yaml bitnami/kafka -n {{ namespace }} --version {{ kafka_version }}
+      remote_user: ubuntu
+
+    - name: nginx-ingress-controller yaml deployment
+      raw: helm upgrade --install nginx -f /home/ubuntu/new-env/helm/nginx-ingress-controller.yml bitnami/nginx-ingress-controller -n {{ namespace }} --version {{ nginx_ic_version }}
+      remote_user: ubuntu
+
+    - name: logstash yaml deployment
+      raw: helm upgrade --install nginx -f /home/ubuntu/new-env/helm/logstash-vrt-cug.yml bitnami/logstash -n {{ namespace }} --version 9.2.22
       remote_user: ubuntu
