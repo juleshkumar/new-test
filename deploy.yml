@@ -23,31 +23,29 @@
       when: aws_output_format is defined
       remote_user: ubuntu
 
-    - name: Create directory
+    - name: s3 copy 1
       raw: |
         aws s3 cp s3://assesment-test-to-delete-yaml/consul-helm.zip /home/ubuntu
         unzip consul-helm.zip
       remote_user: ubuntu
 
-    - name: Create directory
+    - name: s3 copy 2
       raw: |
         aws s3 cp s3://assesment-test-to-delete-yaml/new-env.zip /home/ubuntu
         unzip new-env.zip
       remote_user: ubuntu
 
-    - name: Create directory
+    - name: s3 copy 3
       raw: |
         aws s3 cp s3://assesment-test-to-delete-yaml/new-env-2.zip /home/ubuntu
         unzip new-env-2.zip
       remote_user: ubuntu
 
-    - name: Create directory
-      raw: |
-        aws s3 cp s3://assesment-test-to-delete-yaml/logging-agent.yml /home/ubuntu
-        unzip new-env.zip
+    - name: s3 copy 4
+      raw: aws s3 cp s3://assesment-test-to-delete-yaml/logging-agent.yml /home/ubuntu
       remote_user: ubuntu
 
-    - name: Create directory
+    - name: s3 copy 5
       raw: aws s3 cp s3://assesment-test-to-delete-yaml/consul-values.yml /home/ubuntu
       remote_user: ubuntu
 
