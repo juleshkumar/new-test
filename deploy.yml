@@ -62,7 +62,7 @@
       remote_user: ubuntu
 
     - name: kubectl create namespace
-      raw: kubectl apply -f /home/ubuntu/new-env/vrt-pvc/* -n {{ namespace }}
+      raw: kubectl apply -f /home/ubuntu/new-env/vrt-pvc/* -n {{ namespace_name }}
       remote_user: ubuntu
 
     - name: bitnami repo
@@ -70,22 +70,22 @@
       remote_user: ubuntu
 
     - name: consul yaml deployment
-      raw: helm upgrade --install consul -f /home/ubuntu/new-env/helm/consul-discovery-vrt.yaml bitnami/consul -n {{ namespace }} --version {{ consul_version }}
+      raw: helm upgrade --install consul -f /home/ubuntu/new-env/helm/consul-discovery-vrt.yaml bitnami/consul -n {{ namespace_name }} --version {{ consul_version }}
       remote_user: ubuntu
 
     - name: elasticsearch yaml deployment
-      raw: helm upgrade --install elasticsearch -f /home/ubuntu/new-env/helm/elasticsearch-vrt-cug.yml bitnami/elasticsearch -n {{ namespace }} --version {{ elasticsearch_version }}
+      raw: helm upgrade --install elasticsearch -f /home/ubuntu/new-env/helm/elasticsearch-vrt-cug.yml bitnami/elasticsearch -n {{ namespace_name }} --version {{ elasticsearch_version }}
       remote_user: ubuntu
 
 
     - name: kafka yaml deployment
-      raw: helm upgrade --install kafka -f /home/ubuntu/new-env/helm/kafka-zookeeper-vrt.yaml bitnami/kafka -n {{ namespace }} --version {{ kafka_version }}
+      raw: helm upgrade --install kafka -f /home/ubuntu/new-env/helm/kafka-zookeeper-vrt.yaml bitnami/kafka -n {{ namespace_name }} --version {{ kafka_version }}
       remote_user: ubuntu
 
     - name: nginx-ingress-controller yaml deployment
-      raw: helm upgrade --install nginx -f /home/ubuntu/new-env/helm/nginx-ingress-controller.yml bitnami/nginx-ingress-controller -n {{ namespace }} --version {{ nginx_ic_version }}
+      raw: helm upgrade --install nginx -f /home/ubuntu/new-env/helm/nginx-ingress-controller.yml bitnami/nginx-ingress-controller -n {{ namespace_name }} --version {{ nginx_ic_version }}
       remote_user: ubuntu
 
     - name: logstash yaml deployment
-      raw: helm upgrade --install nginx -f /home/ubuntu/new-env/helm/logstash-vrt-cug.yml bitnami/logstash -n {{ namespace }} --version 9.2.22
+      raw: helm upgrade --install nginx -f /home/ubuntu/new-env/helm/logstash-vrt-cug.yml bitnami/logstash -n {{ namespace_name }} --version 9.2.22
       remote_user: ubuntu
