@@ -62,7 +62,7 @@
       remote_user: ubuntu
 
     - name: kubectl create namespace
-      raw: kubectl apply -f /home/ubuntu/new-env/vrt-pvc/* -n {{ namespace_name }}
+      raw: kubectl apply -f /home/ubuntu/new-env/vrt-pvc/. -n {{ namespace_name }}
       remote_user: ubuntu
 
     - name: bitnami repo
