@@ -124,12 +124,12 @@
         chmod 0777 /home/ubuntu/efs/kafka/kafka-3
         mkdir -p /home/ubuntu/efs/logging-agent
         chmod 0755 /home/ubuntu/efs/logging-agent
-        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-0
-        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-0
-        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-1
-        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-1
-        mkdir -p /home/ubuntu/efs/loggingagent/logging-agent-2
-        chmod 0777 /home/ubuntu/efs/loggingagent/logging-agent-2
+        mkdir -p /home/ubuntu/efs/logging-agent/logging-agent-0
+        chmod 0777 /home/ubuntu/efs/logging-agent/logging-agent-0
+        mkdir -p /home/ubuntu/efs/logging-agent/logging-agent-1
+        chmod 0777 /home/ubuntu/efs/logging-agent/logging-agent-1
+        mkdir -p /home/ubuntu/efs/logging-agent/logging-agent-2
+        chmod 0777 /home/ubuntu/efs/logging-agent/logging-agent-2
         mkdir -p /home/ubuntu/efs/logstash
         chmod 0755 /home/ubuntu/efs/logstash
         mkdir -p /home/ubuntu/efs/kafka/logstash-0
