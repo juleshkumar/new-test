@@ -58,7 +58,7 @@
       remote_user: ubuntu
     
     - name: kubectl create namespace
-      raw: kubectl apply -f /home/ubuntu/new-env/vrt-pvc/storageClass.yaml
+      raw: kubectl apply -f /home/ubuntu/new-env/vrt-pvc/storage-sc.yaml
       remote_user: ubuntu
 
     - name: kubectl create namespace
